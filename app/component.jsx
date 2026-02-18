@@ -130,4 +130,43 @@ const Mystyles = StyleSheet.create({
     buttons,text,activity listener,badges,text input ,Helper text,icons,useStates components to caputre in some variables
     data.includes('@')
 
+
+    **check boxes**
+    which has a default status of uncheck inside if we give it as status check then it will be like selected
+    customisations:{the colors will be applied only when the check box was in check state}
+    in order make it like a button we will be using useState like;
+        status={status ? check : uncheck}
+        <button
+            mode:Contained
+            onPress : {()=> setStatus(!status)}>Click me</>
+
+        However the check box is invisible when it was used without the label in ios but in android it was visible
+
+    **Radio Button**
+
+    same as like a check box but we will be giving the status in the string format
+
+    **Switch**
+    it is a toggle switch
+    <switch
+        value = {status}   the switch can be controlled
+        onChange={()=>setStatus(!status)}
+    />
+
+
+    **Search Bar**
+    it defaultly comes with an elevated edge like a default shaded color and works like an inpput field
+    it has two modes:
+        1.View(extends the entire search bar along the screen)
+        2.bar(default case)
+    <SearchBar  />
+
+    **Chip**
+        it is like a badge format similar badges created using div (onClose functions are used only in this chips)
+    <Chip
+        Onclose:{()=>alert("closed")}
+    >My hoome</>
+
+
+
 */
