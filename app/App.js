@@ -8,7 +8,7 @@ import PasswordField from "./password.jsx";
 const App = () => {
   return (
     <>
-      <SafeAreaProvider>
+      <SafeAreaProvider> 
         {/* <Component /> */}
         <PasswordField/>
       </SafeAreaProvider>
