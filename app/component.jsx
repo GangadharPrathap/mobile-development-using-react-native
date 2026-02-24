@@ -168,5 +168,79 @@ const Mystyles = StyleSheet.create({
     >My hoome</>
 
 
+    23-02-2026
+    ****** Navigation in ReactNative ********
+    there are three types of navigations ::
+    1. Top bar Navigations
+    2. Bottom bar Navigations
+    3. Stack Navigations
+    4. Drawer Navigations
+
+    ---------------------  STACK NAVIGATIONS  -------------------
+    the stack navigations as based on the stack ds format just LIFO format( When the stack becomes empty the entire application will get closed automatically)
+    Packages required :
+        @react-navigation/native
+        @react-native-screens
+        @react-native-safe-area-context         these three are mandatory to use navigations
+        react-navigation/native-stack
+
+    different screens are required in order to use the navigations
+    create Home.jsx
+    create contact.jsx
+    now we create a navigation container in order to perform the navigations
+    in order to perform any operations on the screen like titles,customisations we use screenOptions tag to do customisations in block
+    Customisations:::
+        1. Title:"   " to put a title
+        2. headerShown : True/False in order to display the header or not
+        3. headerStyle:{
+            backgroundColor:"red" to change the background colors of the header
+        }
+        4. headerTintColor: "red"  it is used to change the color of the content present in the header
+        5. headerTitleStyle:{
+            fontsize: "26"
+
+            }any kind of customizations related to font of the header we use this tag
+        6.  headerTitleAlign: "Center"
+        if we are using the native stack navigations we are not able to change the alignment of the title name in ios
+        but in the android it was possible to change the alignment
+        7. headerRight:()=><Icon source = {Bell} size = {24}>
+        this tag is used in order to place anything like icons or buttons on the header at right position
+        8. headerLeft: ()=><Icon source = {Home} size = {24}> similar to that of headerRight()
+        9. headerBackButtonDisplayMode:"minimal" then in ios screen the previous screen data won't be mentioned
+        10. animation:"" this is used to add some customised animations while we are changing in between the screens
+
+
+
+        Sending data from one Screen to another Screen
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 */
