@@ -6,7 +6,7 @@
 // import Contact from "./Contact.jsx";
 // import Component from "./component.jsx";
 // import { SafeAreaProvider } from "react-native-safe-area-context";
-// import PasswordField from "./password.jsx";
+// import PasswordField from "./task.jsx";
 // import {NavigationContainer} from "@react-navigation/native"
 // import {createNativeStackNavigator} from "@react-navigation/native-stack"
 
@@ -77,4 +77,3 @@ export default function App() {
    </NavigationContainer>
   );
 }
-
