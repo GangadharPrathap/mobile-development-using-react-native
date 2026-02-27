@@ -92,17 +92,43 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 const Stack = createNativeStackNavigator();
 import Profile from './Profile';
-import TabNavigation from './TabNavigation';
+// import TabNavigation from './TabNavigation';
 export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="TabNavigation" component={TabNavigation}/>
+        {/* <Stack.Screen name="TabNavigation" component={TabNavigation}/> */}
         <Stack.Screen name="Profile" component={Profile}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
+
+// import { StatusBar } from 'expo-status-bar';
+// import { StyleSheet, Text, View } from 'react-native';
+// import { Icon } from 'react-native-paper';
+// import Home from './Home';
+// import Contact from './Contact';
+// import  createDrawerNavigator from "@react-navigation/drawer"
+// import { NavigationContainer } from '@react-navigation/native';
+//      const DrawerNavigation = createDrawerNavigator
+//       <NavigationContainer>
+//         <DrawerNavigation.Navigator>
+//           <DrawerNavigation.Screen name="Home" component = {Home}></DrawerNavigation.Screen>
+//           <DrawerNavigation.Screen name="Settings" component = {Contact}></DrawerNavigation.Screen>
+//         </DrawerNavigation.Navigator>
+//       </NavigationContainer>
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -261,6 +287,36 @@ export default function App() {
         in contact page
         we will add a button to change the page from the contact page to the profile page
 
+
+
+
+
+     ------------------ DRAWER NAVIAGTIONS--------------------------------
+     react-navigation/drawer is the most important command in order make the navigations work
+     implementation is very similar to that of remaining naviagtions
+     import  createDrawerNavigator
+     const DrawerNavigation = createDrawerNavigator
+      <NavigationContainer
+        ScreenOptions: {
+        drawerActiveTintColor = "green",
+        drawerInactiveTintColor = "greenish yellow",
+        drawerActiveBackgroundColor = "pink",
+        drawerInactiveBackgroundColor = "blue",
+        drawerPosition:"right",///left is default
+        drawerLabelStyle:{
+        font customisations
+        },
+        drawerStyles:{used to customize the drawer panel
+          width:
+        },
+        drawerItemStyle:{},
+        drawerlabel:{},
+        drawerIcon: () => (<Icon source = {"Home"} />)
+        }
+      >
+        <DrawerNavigation.Navigator>
+          <DrawerNavigation.Screen name="Home" component = {Home}>
+          <DrawerNavigation.Screen name="Settings" component = {Contact}>
 
 
 
