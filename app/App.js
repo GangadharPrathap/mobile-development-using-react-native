@@ -82,27 +82,85 @@
 
 
 
+// Stack Navigations
+// import { StatusBar } from 'expo-status-bar';
+// import { StyleSheet, Text, View } from 'react-native';
+// import { Icon } from 'react-native-paper';
+// import Home from './Home';
+// import Contact from './Contact';
+// import { NavigationContainer } from '@react-navigation/native';
+// import { createNativeStackNavigator } from '@react-navigation/native-stack';
+// const Stack = createNativeStackNavigator();
+// import Profile from './Profile';
+// // import TabNavigation from './TabNavigation';
+// export default function App() {
+//   return (
+//     <NavigationContainer>
+//       <Stack.Navigator>
+//         {/* <Stack.Screen name="TabNavigation" component={TabNavigation}/> */}
+//         <Stack.Screen name="Profile" component={Profile}/>
+//       </Stack.Navigator>
+//     </NavigationContainer>
+//   );
+// }
 
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import { Icon } from 'react-native-paper';
-import Home from './Home';
-import Contact from './Contact';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-const Stack = createNativeStackNavigator();
-import Profile from './Profile';
-// import TabNavigation from './TabNavigation';
-export default function App() {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        {/* <Stack.Screen name="TabNavigation" component={TabNavigation}/> */}
-        <Stack.Screen name="Profile" component={Profile}/>
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
+
+
+import react, { useState } from "react";
+import { View,Image,Text } from "react-native";
+import { Button } from "react-native-paper";
+import * as Imagepicker from 'expo-image-picker';
+import { SafeAreaView } from "react-native-safe-area-context";
+
+const Home = () =>{
+    const [ImagePath , setImagePath] = useState(null)
+    const LaunchGallary = async() =>{
+        const Response = await Imagepicker.requestMediaLibraryPermissionsAsync();
+        if(!Response.granted){
+            alert('Please Give Access to Media')
+            return;
+        }
+        const Data = await Imagepicker.launchImageLibraryAsync({
+            mediaTypes:"images",
+            allowsMultipleSelection:true,
+            allowsEditing:true,
+            quality:1
+        })
+        setImagePath(Data.assets)
+        console.log(Data.assets)
+    }
+    return(
+        <>
+          <SafeAreaView>
+            <Button mode="contained" onPress={LaunchGallary}>
+                    Tap Me!!!
+            </Button>
+            {
+                ImagePath
+                ? <View>
+                    {
+                        ImagePath.map((ele,index)=>{
+
+                            return <Image
+                                key={index}
+                                source={{uri:ele.uri}}
+                                style={{width:200,height:200}}
+                            />
+                        })
+                    }
+                </View>
+                : <Text>No Images selected</Text>
+            }
+          </SafeAreaView>
+        </>
+    )
 }
+export default Home;
+
+
+
+
+
 
 // import { StatusBar } from 'expo-status-bar';
 // import { StyleSheet, Text, View } from 'react-native';
@@ -317,6 +375,61 @@ export default function App() {
         <DrawerNavigation.Navigator>
           <DrawerNavigation.Screen name="Home" component = {Home}>
           <DrawerNavigation.Screen name="Settings" component = {Contact}>
+
+
+
+      ---------- CORE React Native Concepts -----------
+      Native modules of React Native
+      Today class is about accessing the gallery or photos in the mobile using react native
+      we have to use the expo-image-picker package in order to access the gallery in the mobile
+      npm install expo-image-picker but we use npx expo install expo-image-picker
+      in order to check the permissions we use the following code
+      import * as ImagePicker from "expo-image-picker"
+      const LaunchGallery = async ()=>{
+        const resp = await ImagePicker.requestMediaLibraryPermissionsAsync()
+        console.log(resp)
+        if(!resp.granted){
+          alert("Permission requested to access the gallery")
+          return;
+          }
+        }
+          const data = await ImagePicker.launchImageLibraryAsync(){
+            allowsEditing:true,
+            aspect:[4,3],
+            mediaTypes:"Images",
+            allowsMultipleSelection:true,
+
+            quality:1
+          }
+            // when i use the multiple selection the data will be in the form of array of objects and when i use the single selection the data will be in the form of object
+             console.log(data)
+             setImagePath(data.assets)
+             console.log(data.assets)
+
+
+
+          this is used to launch the gallery in the mobile
+      <Button mode = "contained" onPress={LaunchGallery}>Open Gallery</Button>
+      {
+        ImagePath
+        ? <Image source={{uri:ImagePath}} style = {{width:200,height:200}}/>
+        : <Text>No image selected</Text>
+      }
+
+      {
+          ImagePath
+          ? ImagePath.map((ele,index)=>{
+            return <Image
+                source = {{uri:ele.uri}}
+                style = {{width:200,height:200}}
+                key={index}
+            />
+          })
+          : <Text>No image selected</Text>
+      }
+
+      }
+
 
 
 
