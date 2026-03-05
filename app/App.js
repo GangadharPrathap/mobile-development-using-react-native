@@ -106,58 +106,123 @@
 
 
 
-import react, { useState } from "react";
-import { View,Image,Text } from "react-native";
+// import react, { useState } from "react";
+// import { View,Image,Text } from "react-native";
+// import { Button } from "react-native-paper";
+// import * as Imagepicker from 'expo-image-picker';
+// import { SafeAreaView } from "react-native-safe-area-context";
+
+
+// const Home = () =>{
+//     const [ImagePath , setImagePath] = useState(null)
+//     const LaunchGallary = async() =>{
+//         const Response = await Imagepicker.requestMediaLibraryPermissionsAsync();
+//         if(!Response.granted){
+//             alert('Please Give Access to Media')
+//             return;
+//         }
+//         const Data = await Imagepicker.launchImageLibraryAsync({
+//             mediaTypes:"images",
+//             allowsMultipleSelection:true,
+//             allowsEditing:true,
+//             quality:1
+//         })
+//         setImagePath(Data.assets)
+//         console.log(Data.assets)
+//     }
+//     return(
+//         <>
+//           <SafeAreaView>
+//             <Button mode="contained" onPress={LaunchGallary}>
+//                     Tap Me!!!
+//             </Button>
+//             {
+//                 ImagePath
+//                 ? <View>
+//                     {
+//                         ImagePath.map((ele,index)=>{
+
+//                             return <Image
+//                                 key={index}
+//                                 source={{uri:ele.uri}}
+//                                 style={{width:200,height:200}}
+//                             />
+//                         })
+//                     }
+//                 </View>
+//                 : <Text>No Images selected</Text>
+//             }
+//           </SafeAreaView>
+//         </>
+//     )
+// }
+// export default Home;
+
+
+import React, { useState } from "react";
+import { View, Text, Image } from "react-native";
+import * as ImagePicker from "expo-image-picker";
 import { Button } from "react-native-paper";
-import * as Imagepicker from 'expo-image-picker';
-import { SafeAreaView } from "react-native-safe-area-context";
+import * as Sharing from "expo-sharing";
 
-const Home = () =>{
-    const [ImagePath , setImagePath] = useState(null)
-    const LaunchGallary = async() =>{
-        const Response = await Imagepicker.requestMediaLibraryPermissionsAsync();
-        if(!Response.granted){
-            alert('Please Give Access to Media')
-            return;
-        }
-        const Data = await Imagepicker.launchImageLibraryAsync({
-            mediaTypes:"images",
-            allowsMultipleSelection:true,
-            allowsEditing:true,
-            quality:1
-        })
-        setImagePath(Data.assets)
-        console.log(Data.assets)
+export default function App() {
+
+  const [ImagePath, setImagePath] = useState(null);
+
+  const Choose = async () => {
+    const permissions = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (!permissions.granted) {
+      alert("Permission denied to access the gallery");
+      return;
     }
-    return(
+
+    const data = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 1,
+    });
+
+    if (!data.canceled) {
+      setImagePath(data.assets[0].uri);
+    }
+  };
+
+  const Share = async () => {
+    const status = await Sharing.isAvailableAsync();
+
+    if (!status) {
+      alert("Sharing is not available in your device");
+      return;
+    }
+
+    await Sharing.shareAsync(ImagePath);
+  };
+
+  return (
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center", gap: 20 }}>
+
+      <Button mode="contained" onPress={Choose}>
+        Choose Image
+      </Button>
+
+      {ImagePath ? (
         <>
-          <SafeAreaView>
-            <Button mode="contained" onPress={LaunchGallary}>
-                    Tap Me!!!
-            </Button>
-            {
-                ImagePath
-                ? <View>
-                    {
-                        ImagePath.map((ele,index)=>{
+          <Image
+            source={{ uri: ImagePath }}
+            style={{ width: 200, height: 200, borderRadius: 10 }}
+          />
 
-                            return <Image
-                                key={index}
-                                source={{uri:ele.uri}}
-                                style={{width:200,height:200}}
-                            />
-                        })
-                    }
-                </View>
-                : <Text>No Images selected</Text>
-            }
-          </SafeAreaView>
+          <Button mode="contained" onPress={Share}>
+            Share Image
+          </Button>
         </>
-    )
+      ) : (
+        <Text>No image selected</Text>
+      )}
+
+    </View>
+  );
 }
-export default Home;
-
-
 
 
 
@@ -429,6 +494,50 @@ export default Home;
       }
 
       }
+
+
+    ---------------------------  file sharing ------------------------------------
+    i will be creating a button in order send the image to another app
+    import * as Imagepicker from "expo-image-picker"
+    import {useState} from "react"
+    import * as Sharing from "expo-sharing" -----> new package npm i expo-sharing
+    const [ImagePath,setImagePath] = useState(null)
+    const Choose = async()=>{
+            const permissions = await ImagePicker.requestMediaLibraryPermissionsAsync()
+            console.log(permissions)
+            if(!permissions.granted){
+            alert("Permission denied to access the gallery")
+            return;}
+            const data = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes:"Images",
+                quality:1,
+
+            })
+                console.log(data.assets[0].uri)
+                setImagePath(data.assets[0].uri)
+            }
+        }
+    const Share = async()=>{
+        const status = await Sharing.isAvailableAsync()  // this is used to check whether the sharing option is available in the mobile or not
+        if(!status){
+            alert("Sharing is not available in your device")
+            return;
+        }
+        await Sharing.shareAsync(ImagePath)  // this is used to share the image to another app
+
+        }
+    return(
+    <View>
+        <Button mode = "contained" onPress={Choose}>Choose Image</Button>
+        {
+            ImagePath
+            ? <Button mode = "contained" onPress={Share}>Share Image</Button>
+            : <Text>No image selected</Text>
+        }
+        <Button>share</Button>
+    </View>
+)
+
 
 
 
