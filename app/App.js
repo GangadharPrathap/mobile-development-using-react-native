@@ -158,71 +158,136 @@
 // }
 // export default Home;
 
-
-import React, { useState } from "react";
-import { View, Text, Image } from "react-native";
-import * as ImagePicker from "expo-image-picker";
-import { Button } from "react-native-paper";
+import React, { useState, useRef } from "react";
+import { View, Image } from "react-native";
+import { Button, Text } from "react-native-paper";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { CameraView, useCameraPermissions } from "expo-camera";
 import * as Sharing from "expo-sharing";
 
-export default function App() {
-
+const Home = () => {
   const [ImagePath, setImagePath] = useState(null);
+  const [permission, requestCamAccess] = useCameraPermissions();
+  const cameraRef = useRef(null);
 
-  const Choose = async () => {
-    const permissions = await ImagePicker.requestMediaLibraryPermissionsAsync();
+  if (!permission) {
+    return <Text>Loading...</Text>;
+  }
 
-    if (!permissions.granted) {
-      alert("Permission denied to access the gallery");
-      return;
-    }
+  if (!permission.granted) {
+    return (
+      <Button mode="contained" onPress={requestCamAccess} style={{ marginTop: 200 }}>
+        Request Camera Access
+      </Button>
+    );
+  }
 
-    const data = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      quality: 1,
-    });
-
-    if (!data.canceled) {
-      setImagePath(data.assets[0].uri);
+  const Capture = async () => {
+    if (cameraRef.current) {
+      const picture = await cameraRef.current.takePictureAsync();
+      setImagePath(picture.uri);
     }
   };
 
   const Share = async () => {
     const status = await Sharing.isAvailableAsync();
-
-    if (!status) {
-      alert("Sharing is not available in your device");
-      return;
+    if (status && ImagePath) {
+      await Sharing.shareAsync(ImagePath);
     }
-
-    await Sharing.shareAsync(ImagePath);
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center", gap: 20 }}>
+    <SafeAreaView>
+      <View>
+        <CameraView
+          style={{ width: "100%", height: 300 }}
+          facing="front"
+          ref={cameraRef}
+        />
 
-      <Button mode="contained" onPress={Choose}>
-        Choose Image
-      </Button>
+        <Button mode="contained" onPress={Capture} style={{ marginTop: 200 }}>
+          Take Picture
+        </Button>
 
-      {ImagePath ? (
-        <>
-          <Image
-            source={{ uri: ImagePath }}
-            style={{ width: 200, height: 200, borderRadius: 10 }}
-          />
+        {ImagePath ? (
+          <Image source={{ uri: ImagePath }} style={{ width: 200, height: 200 }} />
+        ) : (
+          <Text>No Captured Image</Text>
+        )}
 
-          <Button mode="contained" onPress={Share}>
-            Share Image
-          </Button>
-        </>
-      ) : (
-        <Text>No image selected</Text>
-      )}
-
-    </View>
+        <Button mode="contained" onPress={Share}>
+          Share
+        </Button>
+      </View>
+    </SafeAreaView>
   );
-}
+};
+
+export default Home;
+// import React, { useState } from "react";
+// import { View, Text, Image } from "react-native";
+// import * as ImagePicker from "expo-image-picker";
+// import { Button } from "react-native-paper";
+// import * as Sharing from "expo-sharing";
+
+// export default function App() {
+
+//   const [ImagePath, setImagePath] = useState(null);
+
+//   const Choose = async () => {
+//     const permissions = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+//     if (!permissions.granted) {
+//       alert("Permission denied to access the gallery");
+//       return;
+//     }
+
+//     const data = await ImagePicker.launchImageLibraryAsync({
+//       mediaTypes: ImagePicker.MediaTypeOptions.Images,
+//       quality: 1,
+//     });
+
+//     if (!data.canceled) {
+//       setImagePath(data.assets[0].uri);
+//     }
+//   };
+
+//   const Share = async () => {
+//     const status = await Sharing.isAvailableAsync();
+
+//     if (!status) {
+//       alert("Sharing is not available in your device");
+//       return;
+//     }
+
+//     await Sharing.shareAsync(ImagePath);
+//   };
+
+//   return (
+//     <View style={{ flex: 1, justifyContent: "center", alignItems: "center", gap: 20 }}>
+
+//       <Button mode="contained" onPress={Choose}>
+//         Choose Image
+//       </Button>
+
+//       {ImagePath ? (
+//         <>
+//           <Image
+//             source={{ uri: ImagePath }}
+//             style={{ width: 200, height: 200, borderRadius: 10 }}
+//           />
+
+//           <Button mode="contained" onPress={Share}>
+//             Share Image
+//           </Button>
+//         </>
+//       ) : (
+//         <Text>No image selected</Text>
+//       )}
+
+//     </View>
+//   );
+// }
 
 
 
@@ -538,6 +603,46 @@ export default function App() {
     </View>
 )
 
+
+
+
+---------------------- Camera Access ----------------------
+in order to access the camera we have to use the expo-camera package
+npm i expo-camera
+import * as Camera from "expo-camera"
+const [hasPermission,setHasPermission] = useState(null)
+const [CameraType,setCameraType] = useState(Camera.Constants.Type.back)
+useEffect(()=>{
+    (async()=>{
+        const {status} = await Camera.requestCameraPermissionsAsync()
+        setHasPermission(status === "granted")
+    })()
+},[])
+
+if(hasPermission === null){
+    return <View><Text>Requesting for camera permission</Text></View>
+}
+if(hasPermission === false){
+    return <View><Text>No access to camera</Text></View>
+}
+
+return(
+    <View style={{flex:1}}>
+        <Camera style={{flex:1}} type={CameraType}>
+            <View style={{flex:1,backgroundColor:"transparent",flexDirection:"row"}}>
+                <TouchableOpacity style={{flex:0.1,alignSelf:"flex-end",alignItems:"center"}} onPress={()=>{
+                    setCameraType(
+                        CameraType === Camera.Constants.Type.back
+                        ? Camera.Constants.Type.front
+                        : Camera.Constants.Type.back
+                    )
+                }}>
+                    <Text style={{fontSize:18,marginBottom:10,color:"white"}}> Flip </Text>
+                </TouchableOpacity>
+            </View>
+        </Camera>
+    </View>
+)
 
 
 
