@@ -158,72 +158,116 @@
 // }
 // export default Home;
 
-import React, { useState, useRef } from "react";
-import { View, Image } from "react-native";
-import { Button, Text } from "react-native-paper";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { CameraView, useCameraPermissions } from "expo-camera";
-import * as Sharing from "expo-sharing";
+// import React, { useState, useRef } from "react";
+// import { View, Image } from "react-native";
+// import { Button, Text } from "react-native-paper";
+// import { SafeAreaView } from "react-native-safe-area-context";
+// import { CameraView, useCameraPermissions } from "expo-camera";
+// import * as Sharing from "expo-sharing";
 
-const Home = () => {
-  const [ImagePath, setImagePath] = useState(null);
-  const [permission, requestCamAccess] = useCameraPermissions();
-  const cameraRef = useRef(null);
+// const Home = () => {
+//   const [ImagePath, setImagePath] = useState(null);
+//   const [permission, requestCamAccess] = useCameraPermissions();
+//   const cameraRef = useRef(null);
 
-  if (!permission) {
-    return <Text>Loading...</Text>;
-  }
+//   if (!permission) {
+//     return <Text>Loading...</Text>;
+//   }
 
-  if (!permission.granted) {
-    return (
-      <Button mode="contained" onPress={requestCamAccess} style={{ marginTop: 200 }}>
-        Request Camera Access
-      </Button>
-    );
-  }
+//   if (!permission.granted) {
+//     return (
+//       <Button mode="contained" onPress={requestCamAccess} style={{ marginTop: 200 }}>
+//         Request Camera Access
+//       </Button>
+//     );
+//   }
 
-  const Capture = async () => {
-    if (cameraRef.current) {
-      const picture = await cameraRef.current.takePictureAsync();
-      setImagePath(picture.uri);
+//   const Capture = async () => {
+//     if (cameraRef.current) {
+//       const picture = await cameraRef.current.takePictureAsync();
+//       setImagePath(picture.uri);
+//     }
+//   };
+
+//   const Share = async () => {
+//     const status = await Sharing.isAvailableAsync();
+//     if (status && ImagePath) {
+//       await Sharing.shareAsync(ImagePath);
+//     }
+//   };
+
+//   return (
+//     <SafeAreaView>
+//       <View>
+//         <CameraView
+//           style={{ width: "100%", height: 300 }}
+//           facing="front"
+//           ref={cameraRef}
+//         />
+
+//         <Button mode="contained" onPress={Capture} style={{ marginTop: 200 }}>
+//           Take Picture
+//         </Button>
+
+//         {ImagePath ? (
+//           <Image source={{ uri: ImagePath }} style={{ width: 200, height: 200 }} />
+//         ) : (
+//           <Text>No Captured Image</Text>
+//         )}
+
+//         <Button mode="contained" onPress={Share}>
+//           Share
+//         </Button>
+//       </View>
+//     </SafeAreaView>
+//   );
+// };
+
+// export default Home;
+
+//fingerprint authentication
+import React from "react";
+import { View, Text } from "react-native";
+import * as LocalAuthentication from "expo-local-authentication";
+import { Button } from "react-native-paper";
+
+export default function App() {
+    const Authenticate = async () => {
+      const status =await LocalAuthentication.hasHardwareAsync()
+      console.log("hardware",status)
+      const isEnrolled = await LocalAuthentication.isEnrolledAsync()
+      console.log("Enrolled",isEnrolled)
+
+      const result = await LocalAuthentication.authenticateAsync()
+      console.log(result)
     }
-  };
-
-  const Share = async () => {
-    const status = await Sharing.isAvailableAsync();
-    if (status && ImagePath) {
-      await Sharing.shareAsync(ImagePath);
-    }
-  };
-
   return (
-    <SafeAreaView>
-      <View>
-        <CameraView
-          style={{ width: "100%", height: 300 }}
-          facing="front"
-          ref={cameraRef}
-        />
-
-        <Button mode="contained" onPress={Capture} style={{ marginTop: 200 }}>
-          Take Picture
-        </Button>
-
-        {ImagePath ? (
-          <Image source={{ uri: ImagePath }} style={{ width: 200, height: 200 }} />
-        ) : (
-          <Text>No Captured Image</Text>
-        )}
-
-        <Button mode="contained" onPress={Share}>
-          Share
-        </Button>
-      </View>
-    </SafeAreaView>
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <Button mode="contained" onPress={Authenticate}>
+        Authenticate with Biometrics
+      </Button>
+    </View>
   );
-};
+}
 
-export default Home;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // import React, { useState } from "react";
 // import { View, Text, Image } from "react-native";
 // import * as ImagePicker from "expo-image-picker";
