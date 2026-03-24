@@ -226,31 +226,64 @@
 // export default Home;
 
 //fingerprint authentication
+// import React from "react";
+// import { View, Text } from "react-native";
+// import * as LocalAuthentication from "expo-local-authentication";
+// import { Button } from "react-native-paper";
+
+// export default function App() {
+//     const Authenticate = async () => {
+//       const status =await LocalAuthentication.hasHardwareAsync()
+//       console.log("hardware",status)
+//       const isEnrolled = await LocalAuthentication.isEnrolledAsync()
+//       console.log("Enrolled",isEnrolled)
+
+//       const result = await LocalAuthentication.authenticateAsync()
+//       console.log(result)
+//     }
+//   return (
+//     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+//       <Button mode="contained" onPress={Authenticate}>
+//         Authenticate with Biometrics
+//       </Button>
+//     </View>
+//   );
+// }
+
+
+
+
+// Notifications in mobile
 import React from "react";
 import { View, Text } from "react-native";
-import * as LocalAuthentication from "expo-local-authentication";
+import * as Notifications from "expo-notifications";
 import { Button } from "react-native-paper";
-
+Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+        shouldPlaySound: true,
+        shouldShowAlert: true,
+        shouldSetBadge: true,
+        ShouldShowBanner:true,
+    })
+})
 export default function App() {
-    const Authenticate = async () => {
-      const status =await LocalAuthentication.hasHardwareAsync()
-      console.log("hardware",status)
-      const isEnrolled = await LocalAuthentication.isEnrolledAsync()
-      console.log("Enrolled",isEnrolled)
-
-      const result = await LocalAuthentication.authenticateAsync()
-      console.log(result)
+  const sendNotification = async () => {
+    const permission = await Notifications.requestPermissionsAsync();
+    if (!permission.granted) {
+      alert("Permission denied to send notifications");
+      return;
     }
+    const Data = await Notifications.getExpoPushTokenAsync()
+    console.log(Data)
+  }
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Button mode="contained" onPress={Authenticate}>
-        Authenticate with Biometrics
+      <Button mode="contained" onPress={sendNotification}>
+        Send Notification
       </Button>
     </View>
   );
 }
-
-
 
 
 
@@ -687,6 +720,14 @@ return(
         </Camera>
     </View>
 )
+
+
+
+
+--------------------------Notifications in Mobile---------------------------
+in this process we will be using the expo-notifications package in order to send notifications to the mobile
+in order to send the notifications we have to install the expo-notifications package
+using npm i expo-notifications
 
 
 
